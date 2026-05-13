@@ -1,10 +1,13 @@
-<script setup lang="ts">
+<script setup>
 
 import MenuIcon from "@/components/navbar/Icons/MenuIcon.vue";
-import HomapageIcon from "@/components/navbar/Icons/HomapageIcon.vue";
+import HomepageIcon from "@/components/navbar/Icons/HomepageIcon.vue";
 import FriendIcon from "@/components/navbar/Icons/FriendIcon.vue";
 import CreateIcon from "@/components/navbar/Icons/CreateIcon.vue";
 import SearchIcon from "@/components/navbar/Icons/SearchIcon.vue";
+import {useUserStore} from "@/stores/user.js";
+import UserMenu from "@/components/navbar/UserMenu.vue";
+const user = useUserStore()
 </script>
 
 <template>
@@ -28,7 +31,14 @@ import SearchIcon from "@/components/navbar/Icons/SearchIcon.vue";
           </div>
         </div>
         <div class="navbar-end">
-          <RouterLink :to="{name: 'user-account-login-index'}" active-class="btn-active" class="btn btn-ghost text-lg">登录</RouterLink>
+          <RouterLink v-if="user.isLogin()" :to="{name:'create-index'}" active-class="btn-active" class="btn btn-ghost text-base mr-6">
+            <CreateIcon/>
+            创作
+          </RouterLink>
+          <RouterLink v-if="!user.isLogin()":to="{name: 'user-account-login-index'}" active-class="btn-active" class="btn btn-ghost text-lg">
+            登录
+          </RouterLink>
+          <UserMenu v-else/>
         </div>
       </nav>
       <slot></slot>
@@ -40,7 +50,7 @@ import SearchIcon from "@/components/navbar/Icons/SearchIcon.vue";
         <ul class="menu w-full grow">
           <li>
             <RouterLink :to="{name: 'homepage-index'}" active-class="menu-focus" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-3" data-tip="首页">
-              <HomapageIcon/>
+              <HomepageIcon/>
               <span class="is-drawer-close:hidden text-base ml-2 whitespace-nowrap">首页</span>
             </RouterLink>
           </li>
